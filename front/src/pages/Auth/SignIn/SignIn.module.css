@@ -1,0 +1,37 @@
+.page {
+    @apply flex justify-between items-center w-full h-screen overflow-hidden;
+}
+.page__left {
+    @apply w-1/2 h-screen relative flex justify-center items-center flex-col p-5;
+}
+.page__left img {
+    @apply w-full h-full object-cover rounded-2xl;
+}
+.page__right {
+    @apply flex justify-center items-center flex-col h-screen w-1/2;
+}
+.page__right p {
+    @apply text-base opacity-50 mb-6;
+}
+
+.form__component {
+    @apply flex flex-col w-full mb-2;
+}
+.form__component label {
+    @apply text-gray-400 text-base
+}
+.form__component input {
+    @apply w-full  border-gray-300 border-solid focus:border-yellow-600 transition-all duration-300 ease-linear  cursor-pointer bg-transparent p-2 rounded-md outline-none;
+    border-width: 1px;
+}
+.form__component input:hover {
+    box-shadow:  2px 2px 10px rgb(20,20,20,.1);
+}
+.btn {
+    @apply w-full  border-gray-300 border-solid focus:border-yellow-900 transition-all duration-300 ease-linear  cursor-pointer bg-transparent p-2 rounded-md mt-4 text-gray-500;
+    border-width: 1px;
+}
+.btn:hover {
+    box-shadow:  2px 2px 10px rgb(20,20,20,.1);
+    @apply bg-yellow-600 text-white;
+}
