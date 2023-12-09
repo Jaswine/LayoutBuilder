@@ -12,17 +12,22 @@ namespace LayoutBuilder.Services.ProjectServices
             new Project { Id = 2, Title = "Project 2", Data = "Data 2" }
         };
 
-        public List<Project> GetAllProjects()
+        public async Task<List<Project>> GetAllProjects()
         {
             return projects;
         }
 
-        public Project GetProjectById(int id)
+        public async  Task<Project> GetProjectById(int id)
         {
-            return projects.FirstOrDefault(p => p.Id == id);
+            var project = projects.FirstOrDefault(p => p.Id == id);
+            if (project is not null)
+            {
+                return project;
+            }
+            throw new Exception($"Project with id {id} not found");
         }
 
-        public Project AddProject(Project newProject)
+        public async  Task<Project> AddProject(Project newProject)
         {
             newProject.Id = projects.Max(p => p.Id) + 1;
             projects.Add(newProject);

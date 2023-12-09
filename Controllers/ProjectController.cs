@@ -18,21 +18,21 @@ namespace LayoutBuilder.Controllers
         }
 
         [HttpGet("list")]
-        public ActionResult<List<Project>> Get() 
+        public async Task<ActionResult<List<Project>>> Get() 
         {
-            return Ok(_projectService.GetAllProjects());
+            return Ok( await _projectService.GetAllProjects());
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Project> GetSingle(int id) 
+        public async Task<ActionResult<Project>> GetSingle(int id) 
         {
-            return Ok(_projectService.GetProjectById(id));
+            return Ok( await _projectService.GetProjectById(id));
         }
 
         [HttpPost]
-        public ActionResult<Project> AddProject(Project newProject) 
+        public async Task<ActionResult<Project>> AddProject(Project newProject) 
         {
-            return Ok(_projectService.AddProject(newProject));
+            return Ok(await _projectService.AddProject(newProject));
         }
 
     }
