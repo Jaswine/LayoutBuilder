@@ -7,10 +7,10 @@ namespace LayoutBuilder.Services.ProjectServices
 {
     public interface IProjectService
     {
-        Task<List<Project>> GetAllProjects();
+        Task<ProjectResponse<List<Project>>> GetAllProjects();
 
-        Task<Project> GetProjectById(int id);
+        Task<ProjectResponse<Project>> GetProjectById(int id);
 
-        Task<Project> AddProject(Project newProject);
+        Task<ProjectResponse<Project>> AddProject(Project newProject);
     }
 }

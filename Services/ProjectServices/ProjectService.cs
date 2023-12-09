@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+
 namespace LayoutBuilder.Services.ProjectServices
 {
     public class ProjectService : IProjectService
@@ -12,26 +13,38 @@ namespace LayoutBuilder.Services.ProjectServices
             new Project { Id = 2, Title = "Project 2", Data = "Data 2" }
         };
 
-        public async Task<List<Project>> GetAllProjects()
+        public async Task<ProjectResponse<List<Project>>> GetAllProjects()
         {
-            return projects;
+            var projectResponse = new ProjectResponse<List<Project>>();
+            projectResponse.Data = projects;
+            return projectResponse;
         }
 
-        public async  Task<Project> GetProjectById(int id)
+        public async  Task<ProjectResponse<Project>> GetProjectById(int id)
         {
+            var projectResponse = new ProjectResponse<Project>();
+
             var project = projects.FirstOrDefault(p => p.Id == id);
             if (project is not null)
             {
-                return project;
-            }
-            throw new Exception($"Project with id {id} not found");
+                projectResponse.Data = project;
+                return projectResponse;
+            } 
+            projectResponse.Success = false;
+            projectResponse.Message = "Project Not Found";
+            return projectResponse;
         }
 
-        public async  Task<Project> AddProject(Project newProject)
+        public async  Task<ProjectResponse<Project>> AddProject(Project newProject)
         {
+            var projectResponse = new ProjectResponse<Project>();
+
             newProject.Id = projects.Max(p => p.Id) + 1;
             projects.Add(newProject);
-            return newProject;
+
+            projectResponse.Message = "Project created successfully";
+            projectResponse.Data = newProject;
+            return projectResponse;
         }
     }
 }
