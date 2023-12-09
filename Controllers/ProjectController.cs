@@ -41,5 +41,11 @@ namespace LayoutBuilder.Controllers
             return Ok(await _projectService.UpdateProject(updatedProject));
         }
 
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Project>> RemoveProject(int id) 
+        {
+            return Ok( await _projectService.RemoveProjectById(id));
+        }
+
     }
 }

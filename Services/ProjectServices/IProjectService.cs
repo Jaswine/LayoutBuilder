@@ -14,5 +14,7 @@ namespace LayoutBuilder.Services.ProjectServices
         Task<ProjectResponse<Project>> AddProject(Project newProject);
 
         Task<ProjectResponse<Project>> UpdateProject(Project updatedProject);
+
+        Task<ProjectResponse<Project>> RemoveProjectById(int id);
     }
 }

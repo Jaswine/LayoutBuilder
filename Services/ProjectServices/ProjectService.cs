@@ -89,5 +89,23 @@ namespace LayoutBuilder.Services.ProjectServices
             projectResponse.Message = "Project Not Found";
             return projectResponse;
         }
+
+        // ! _____________  REMOVE ONE PROJECT _____________
+        public async  Task<ProjectResponse<Project>> RemoveProjectById(int id)
+        {
+            var projectResponse = new ProjectResponse<Project>();
+
+            var project = projects.FirstOrDefault(p => p.Id == id);
+
+            if (project is not null)
+            {
+                projects.Remove(project);
+                projectResponse.Message = "Project removed successfully!";
+                return projectResponse;
+            } 
+            projectResponse.Success = false;
+            projectResponse.Message = "Project Not Found";
+            return projectResponse;
+        }
     }
 }
