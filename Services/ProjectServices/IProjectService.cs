@@ -12,5 +12,7 @@ namespace LayoutBuilder.Services.ProjectServices
         Task<ProjectResponse<Project>> GetProjectById(int id);
 
         Task<ProjectResponse<Project>> AddProject(Project newProject);
+
+        Task<ProjectResponse<Project>> UpdateProject(Project updatedProject);
     }
 }

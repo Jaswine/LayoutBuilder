@@ -35,5 +35,11 @@ namespace LayoutBuilder.Controllers
             return Ok(await _projectService.AddProject(newProject));
         }
 
+        [HttpPut]
+        public async Task<ActionResult<Project>> UpdateProject(Project  updatedProject) 
+        {
+            return Ok(await _projectService.UpdateProject(updatedProject));
+        }
+
     }
 }

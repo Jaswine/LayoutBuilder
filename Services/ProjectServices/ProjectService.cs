@@ -21,6 +21,7 @@ namespace LayoutBuilder.Services.ProjectServices
             _mapper = mapper;
         }
 
+        // ! _____________  SHOW ALL PROJECTS _____________
         public async Task<ProjectResponse<List<Project>>> GetAllProjects()
         {
             var projectResponse = new ProjectResponse<List<Project>>();
@@ -28,6 +29,7 @@ namespace LayoutBuilder.Services.ProjectServices
             return projectResponse;
         }
 
+        // ! _____________  SHOW ONE PROJECT _____________
         public async  Task<ProjectResponse<Project>> GetProjectById(int id)
         {
             var projectResponse = new ProjectResponse<Project>();
@@ -43,6 +45,7 @@ namespace LayoutBuilder.Services.ProjectServices
             return projectResponse;
         }
 
+        // ! _____________  CREATE A NEW PROJECT _____________
         public async  Task<ProjectResponse<Project>> AddProject(Project newProject)
         {
             var projectResponse = new ProjectResponse<Project>();
@@ -52,6 +55,38 @@ namespace LayoutBuilder.Services.ProjectServices
 
             projectResponse.Message = "Project created successfully";
             projectResponse.Data = newProject;
+            return projectResponse;
+        }
+
+        // ! _____________  UPDATE PROJECT _____________
+        public async Task<ProjectResponse<Project>> UpdateProject(Project updatedProject)
+        {
+            var projectResponse = new ProjectResponse<Project>();
+
+            var existingProject = projects.FirstOrDefault(p => p.Id == updatedProject.Id);
+
+            if (existingProject is not null)
+            {
+                // TODO: title's checking
+                if (updatedProject.Title is not null && updatedProject.Title.Length > 0 && updatedProject.Title != existingProject.Title)
+                {
+                    existingProject.Title = updatedProject.Title;
+                }
+
+                // TODO: data checking
+                if (updatedProject.Data is not null && updatedProject.Data.Length > 0 && updatedProject.Data != existingProject.Data)
+                {
+                    existingProject.Data = updatedProject.Data;
+                }
+
+                projectResponse.Message = "Project updated successfully";
+                projectResponse.Data = existingProject;
+
+                return projectResponse;
+            }
+            
+            projectResponse.Success = false;
+            projectResponse.Message = "Project Not Found";
             return projectResponse;
         }
     }
