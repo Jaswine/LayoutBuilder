@@ -1,6 +1,0 @@
-@LayoutBuilder_HostAddress = http://localhost:5180
-
-GET {{LayoutBuilder_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
