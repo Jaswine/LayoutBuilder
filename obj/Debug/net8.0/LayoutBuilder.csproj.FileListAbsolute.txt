@@ -32,3 +32,5 @@
 /home/jaswine/Projects/asp.net/LayoutBuilder/obj/Debug/net8.0/LayoutBuilder.pdb
 /home/jaswine/Projects/asp.net/LayoutBuilder/obj/Debug/net8.0/LayoutBuilder.genruntimeconfig.cache
 /home/jaswine/Projects/asp.net/LayoutBuilder/obj/Debug/net8.0/ref/LayoutBuilder.dll
+/home/jaswine/Projects/asp.net/LayoutBuilder/bin/Debug/net8.0/AutoMapper.dll
+/home/jaswine/Projects/asp.net/LayoutBuilder/bin/Debug/net8.0/AutoMapper.Extensions.Microsoft.DependencyInjection.dll

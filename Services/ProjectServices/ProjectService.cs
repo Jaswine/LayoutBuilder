@@ -1,3 +1,4 @@
+global using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +14,17 @@ namespace LayoutBuilder.Services.ProjectServices
             new Project { Id = 2, Title = "Project 2", Data = "Data 2" }
         };
 
+        private readonly IMapper _mapper;
+
+        public ProjectService(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
         public async Task<ProjectResponse<List<Project>>> GetAllProjects()
         {
             var projectResponse = new ProjectResponse<List<Project>>();
-            projectResponse.Data = projects;
+            projectResponse.Data = projects.Select(c => _mapper.Map<Project>(c)).ToList();
             return projectResponse;
         }
 
