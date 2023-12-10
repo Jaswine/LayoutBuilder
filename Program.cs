@@ -1,5 +1,6 @@
 global using LayoutBuilder.Models;
 global using LayoutBuilder.Services.ProjectServices;
+global using LayoutBuilder.Services.UserServices;
 global using LayoutBuilder.Models.Response;
 global using LayoutBuilder.Data;
 
@@ -14,7 +15,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddControllers();
+
 builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
