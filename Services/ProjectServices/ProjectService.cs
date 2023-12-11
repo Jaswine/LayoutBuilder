@@ -9,8 +9,8 @@ namespace LayoutBuilder.Services.ProjectServices
     public class ProjectService : IProjectService
     {
         private static List<Project> projects = new List<Project> {
-            new Project { Id = 1, Title = "Project 1", Data = "Data 1" },
-            new Project { Id = 2, Title = "Project 2", Data = "Data 2" }
+            new Project { Id = 1, Title = "Project 1", Data = "Data 1", IsPublic = true },
+            new Project { Id = 2, Title = "Project 2", Data = "Data 2", IsPublic = false}
         };
 
         private readonly IMapper _mapper;

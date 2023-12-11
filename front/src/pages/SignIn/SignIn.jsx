@@ -1,17 +1,32 @@
 import { useState } from 'react'
 import styles from './SignIn.module.scss'
 import Button from '../../components/UI/Button/Button'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 
 const SignIn = () => {
+    const navigate = useNavigate('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [error, setError] = useState('')
 
     const sign_in = async (e) => {
         e.preventDefault()
 
         console.log(email, password)
+
+        axios.post(`http://localhost:5179/api/auth/sign-in`, {
+            email: email, 
+            password: password 
+        }).then(res => {
+          console.log(res.data.message)
+        //   navigate('/')
+        }) 
+        .catch(err => {
+          console.log(err)
+          setError(err.response.data.message)
+        })
     }
 
     return (

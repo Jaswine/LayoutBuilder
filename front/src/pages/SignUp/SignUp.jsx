@@ -1,17 +1,33 @@
 import { useState } from 'react'
 import styles from './../SignIn/SignIn.module.scss'
 import Button from '../../components/UI/Button/Button'
+import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 
 const SignUp = () => {
+    const navigate = useNavigate('')
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [error, setError] = useState('')
 
-    const sign_in = async (e) => {
+    const sign_up = async (e) => {
         e.preventDefault()
 
-        console.log(email, password)
+        axios.post(`http://localhost:5179/api/auth/sign-up`, {
+            username: username, 
+            email: email, 
+            password: password 
+        }).then(res => {
+            console.log(res)
+            console.log(res.data.message)
+        //   navigate('/')
+        }) 
+        .catch(err => {
+          console.log(err)
+          setError(err.response.data.message)
+        })
     }
 
     return (
@@ -54,9 +70,9 @@ const SignUp = () => {
                 </div>
 
                <div className={styles.form__bottom}>
-                <Button onClick={sign_in}>Continue</Button>
+                <Button onClick={sign_up}>Continue</Button>
 
-                    <p>Don't have an account? Create a new account</p>
+                    <p>You have an account? <Link to='/auth/sign-in' className='link'>Sign In</Link></p>
                </div>
             </form>
         </div>

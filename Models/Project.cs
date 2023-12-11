@@ -11,6 +11,7 @@ namespace LayoutBuilder.Models
         public string Title { get; set; }
         public int UserId { get; set; }
         public string? Data { get; set; }
+        public bool IsPublic { get; set; } = false;
 
         public string? UpdatedAt { get; set; } 
         public string? CreatedAt { get; set; } 
