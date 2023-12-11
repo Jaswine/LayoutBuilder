@@ -1,0 +1,11 @@
+.btn {
+    @apply p-2 m-2 pr-6 pl-6 rounded-md;
+    color: rgb(20,20,20,.5);
+    border: 2px solid rgb(20,20,20,.5);
+
+    &:hover {
+        color: rgb(20,20,20,1);
+        border-color: rgb(20,20,20,1);
+        box-shadow: 5px 5px 1px  #ED9ED6;
+    }
+}
