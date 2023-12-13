@@ -3,14 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LayoutBuilder.Dtos.User;
+using Microsoft.EntityFrameworkCore;
+using LayoutBuilder.Utils;
 
 namespace LayoutBuilder.Services.UserServices
 {
     public class UserService : IUserService
     {
-        private static List<User> users = new List<User> {
-            new User {Id = 1, Username = "Alex", Email = "alex@gmail.com", Password = "12345678"},
-        };
+        private readonly DataContext _context;
+
+         public UserService(DataContext context)
+        {
+            _context = context;
+        }
+
 
         // ! __________ SIGN UP USER __________
         public async Task<UserResponse<User>> SignUpUser(SignUpUserDto newUser)
@@ -18,20 +24,20 @@ namespace LayoutBuilder.Services.UserServices
             var userResponse = new UserResponse<User>();
             var user = new User();
 
-            var exitsUser = users.FirstOrDefault(p => p.Email == newUser.Email  || p.Username == newUser.Username);
+             var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == newUser.Email || u.Username == newUser.Username);
 
-            if (exitsUser is null) {
-                user.Id = users.Max(u => u.Id) + 1;
-
+            if (existingUser is null) {
                 user.Username = newUser.Username;
                 user.Email = newUser.Email;
                 user.Password = newUser.Password;
 
-                users.Add(user);
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
 
-                userResponse.Token = "token";
+                userResponse.Token = new JWTGenerator().GenerateJwtToken(user.Id.ToString());
                 userResponse.Message = "User registered successfully";
                 userResponse.Data = user;
+
                 return userResponse;   
             } else {
                 userResponse.Message = "User is exist";
@@ -45,11 +51,11 @@ namespace LayoutBuilder.Services.UserServices
         {
             var userResponse = new UserResponse<User>();
 
-            var user = users.FirstOrDefault(p => p.Email == someUser.Email  && p.Password == someUser.Password);
+             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == someUser.Email && u.Password == someUser.Password);
             if (user is not null)
             {
                 userResponse.Data = user;
-                userResponse.Token = "token";
+                    userResponse.Token = new JWTGenerator().GenerateJwtToken(user.Id.ToString());
                 userResponse.Message = "User logged successfully";
                 return userResponse;
             } 
@@ -64,9 +70,28 @@ namespace LayoutBuilder.Services.UserServices
         {
             var userResponse = new UserResponse<User>();
 
-            var user = users.FirstOrDefault(p => p.Username == username);
+             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
             if (user is not null)
             {
+                userResponse.Data = user;
+                return userResponse;
+            } 
+            userResponse.Success = false;
+            userResponse.Message = "Project Not Found";
+            return userResponse;
+        }
+
+        // ! __________ DELETE USER __________
+          public async  Task<UserResponse<User>> DeleteUserByUsername(string username)
+        {
+            var userResponse = new UserResponse<User>();
+
+             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+            if (user is not null)
+            {
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();
+
                 userResponse.Data = user;
                 return userResponse;
             } 

@@ -35,5 +35,11 @@ namespace LayoutBuilder.Controllers
         {
             return Ok(await _userService.GetUserByUsername(username));
         }
+
+         [HttpDelete("users/{username}")]
+        public async Task<ActionResult<User>> DeleteUserByUsername(string username) 
+        {
+            return Ok(await _userService.GetUserByUsername(username));
+        }
     }
 }
