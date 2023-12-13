@@ -82,14 +82,35 @@ namespace LayoutBuilder.Services.UserServices
         }
 
         // ! __________ DELETE USER __________
-          public async  Task<UserResponse<User>> DeleteUserByUsername(string username)
+        public async  Task<UserResponse<User>> DeleteUserByUsername(string username)
         {
             var userResponse = new UserResponse<User>();
 
-             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
             if (user is not null)
             {
                 _context.Users.Remove(user);
+                await _context.SaveChangesAsync();
+
+                userResponse.Data = user;
+                return userResponse;
+            } 
+            userResponse.Success = false;
+            userResponse.Message = "Project Not Found";
+            return userResponse;
+        }
+
+        // ! __________ UPDATE USER __________
+        public async  Task<UserResponse<User>> UpdateUserByUsername(string username, UpdateUserDto updateUser)
+        {
+            var userResponse = new UserResponse<User>();
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+            if (user is not null)
+            {
+                user.ImageLink = updateUser.ImageLink;  
+                user.About = updateUser.About;
+
                 await _context.SaveChangesAsync();
 
                 userResponse.Data = user;

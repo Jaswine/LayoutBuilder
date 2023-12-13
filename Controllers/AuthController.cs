@@ -41,5 +41,11 @@ namespace LayoutBuilder.Controllers
         {
             return Ok(await _userService.GetUserByUsername(username));
         }
+
+        [HttpPut("users/{username}")]
+        public async Task<ActionResult<User>> UpdateUserByUsername(string username, UpdateUserDto updateUser) 
+        {
+            return Ok(await _userService.UpdateUserByUsername(username, updateUser));
+        }
     }
 }
