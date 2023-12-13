@@ -3,28 +3,33 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LayoutBuilder.Data;
+using Microsoft.EntityFrameworkCore; 
 
 namespace LayoutBuilder.Services.ProjectServices
 {
     public class ProjectService : IProjectService
     {
-        private static List<Project> projects = new List<Project> {
-            new Project { Id = 1, Title = "Project 1", Data = "Data 1", IsPublic = true },
-            new Project { Id = 2, Title = "Project 2", Data = "Data 2", IsPublic = false}
-        };
+        // private static List<Project> projects = new List<Project> {
+        //     new Project { Id = 1, Title = "Project 1", Data = "Data 1", IsPublic = true },
+        //     new Project { Id = 2, Title = "Project 2", Data = "Data 2", IsPublic = false}
+        // };
 
+        private readonly DataContext _context;
         private readonly IMapper _mapper;
 
-        public ProjectService(IMapper mapper)
+        public ProjectService(IMapper mapper, DataContext context)
         {
             _mapper = mapper;
+            _context = context;
         }
 
         // ! _____________  SHOW ALL PROJECTS _____________
         public async Task<ProjectResponse<List<Project>>> GetAllProjects()
         {
             var projectResponse = new ProjectResponse<List<Project>>();
-            projectResponse.Data = projects.Select(c => _mapper.Map<Project>(c)).ToList();
+            // projectResponse.Data = projects.Select(c => _mapper.Map<Project>(c)).ToList();
+            projectResponse.Data = await _context.Projects.Select(c => _mapper.Map<Project>(c)).ToListAsync();
             return projectResponse;
         }
 
@@ -33,7 +38,8 @@ namespace LayoutBuilder.Services.ProjectServices
         {
             var projectResponse = new ProjectResponse<Project>();
 
-            var project = projects.FirstOrDefault(p => p.Id == id);
+            // var project = projects.FirstOrDefault(p => p.Id == id);
+            var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == id);
             if (project is not null)
             {
                 projectResponse.Data = project;
@@ -45,24 +51,25 @@ namespace LayoutBuilder.Services.ProjectServices
         }
 
         // ! _____________  CREATE A NEW PROJECT _____________
-        public async  Task<ProjectResponse<Project>> AddProject(Project newProject)
+        public async Task<ProjectResponse<Project>> AddProject(Project newProject)
         {
             var projectResponse = new ProjectResponse<Project>();
 
-            newProject.Id = projects.Max(p => p.Id) + 1;
-            projects.Add(newProject);
+            _context.Projects.Add(newProject);
+            await _context.SaveChangesAsync();
 
             projectResponse.Message = "Project created successfully";
             projectResponse.Data = newProject;
+
             return projectResponse;
         }
 
         // ! _____________  UPDATE PROJECT _____________
-        public async Task<ProjectResponse<Project>> UpdateProject(Project updatedProject)
+        public async Task<ProjectResponse<Project>> UpdateProject(int id, Project updatedProject)
         {
             var projectResponse = new ProjectResponse<Project>();
 
-            var existingProject = projects.FirstOrDefault(p => p.Id == updatedProject.Id);
+            var existingProject = await _context.Projects.FirstOrDefaultAsync(p => p.Id == id);
 
             if (existingProject is not null)
             {
@@ -77,6 +84,8 @@ namespace LayoutBuilder.Services.ProjectServices
                 {
                     existingProject.Data = updatedProject.Data;
                 }
+
+                await _context.SaveChangesAsync();
 
                 projectResponse.Message = "Project updated successfully";
                 projectResponse.Data = existingProject;
@@ -94,11 +103,14 @@ namespace LayoutBuilder.Services.ProjectServices
         {
             var projectResponse = new ProjectResponse<Project>();
 
-            var project = projects.FirstOrDefault(p => p.Id == id);
+            // var project = projects.FirstOrDefault(p => p.Id == id);
+            var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == id);
 
             if (project is not null)
             {
-                projects.Remove(project);
+                _context.Projects.Remove(project);
+                await _context.SaveChangesAsync();
+
                 projectResponse.Message = "Project removed successfully!";
                 return projectResponse;
             } 

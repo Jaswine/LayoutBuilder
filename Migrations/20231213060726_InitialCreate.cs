@@ -27,6 +27,25 @@ namespace LayoutBuilder.Migrations
                 {
                     table.PrimaryKey("PK_Projects", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Username = table.Column<string>(type: "TEXT", nullable: false),
+                    Email = table.Column<string>(type: "TEXT", nullable: false),
+                    Password = table.Column<string>(type: "TEXT", nullable: false),
+                    ImageLink = table.Column<string>(type: "TEXT", nullable: false),
+                    About = table.Column<string>(type: "TEXT", nullable: false),
+                    UpdatedAt = table.Column<string>(type: "TEXT", nullable: true),
+                    CreatedAt = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
         }
 
         /// <inheritdoc />
@@ -34,6 +53,9 @@ namespace LayoutBuilder.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Projects");
+
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }

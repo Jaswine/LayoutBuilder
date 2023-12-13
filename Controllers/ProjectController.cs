@@ -35,10 +35,10 @@ namespace LayoutBuilder.Controllers
             return Ok(await _projectService.AddProject(newProject));
         }
 
-        [HttpPut]
-        public async Task<ActionResult<Project>> UpdateProject(Project  updatedProject) 
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Project>> UpdateProject(int id, Project  updatedProject) 
         {
-            return Ok(await _projectService.UpdateProject(updatedProject));
+            return Ok(await _projectService.UpdateProject(id, updatedProject));
         }
 
         [HttpDelete("{id}")]

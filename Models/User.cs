@@ -11,7 +11,10 @@ namespace LayoutBuilder.Models
         public string Username { get; set; }
         public string Email { get; set; } 
         public string Password { get; set; } 
-        public string ImageLink { get; set; } = string.Empty;
-        public string About { get; set; } = string.Empty;
+        public string ImageLink { get; set; } = "";
+        public string About { get; set; }  = "";
+
+        public string? UpdatedAt { get; set; } 
+        public string? CreatedAt { get; set; } 
     }
 }
