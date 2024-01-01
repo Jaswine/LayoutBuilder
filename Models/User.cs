@@ -14,7 +14,12 @@ namespace LayoutBuilder.Models
         public string ImageLink { get; set; } = "";
         public string About { get; set; }  = "";
 
-        public string? UpdatedAt { get; set; } 
-        public string? CreatedAt { get; set; } 
+        public List<Project> Projects { get; set; }
+        public List<Comment> Comments { get; set; }
+        public List<Collection> Collections { get; set; }
+
+
+        public DateTime UpdatedAt { get; set; } 
+        public DateTime CreatedAt { get; set; } 
     }
 }

@@ -12,7 +12,7 @@ namespace LayoutBuilder.Services.UserServices
         Task<UserResponse<User>> SignUpUser(SignUpUserDto newUser);
         Task<UserResponse<User>> SignInUser(SignInUserDto someUser);
         Task<UserResponse<User>> GetUserByUsername(string username);
-        Task<UserResponse<User>> DeleteUserByUsername(string username);
-        Task<UserResponse<User>> UpdateUserByUsername(string username, UpdateUserDto updateUser);
+        Task<UserResponse<User>> DeleteUserByUsername(string username, string userId);
+        Task<UserResponse<User>> UpdateUserByUsername(string username, string userId, UpdateUserDto updateUser);
     }
 }

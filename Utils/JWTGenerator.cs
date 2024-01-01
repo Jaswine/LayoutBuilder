@@ -30,5 +30,28 @@ namespace LayoutBuilder.Utils
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
+
+        public string DecodeJwtToken(string token)
+        {
+        string secretKey = "The_Lord_Of_The_Rings_And_The Hobbit_Or_There_and_Back_Again";
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var key = Encoding.ASCII.GetBytes(secretKey);
+
+        var validationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+        };
+
+        SecurityToken validatedToken;
+        var principal = tokenHandler.ValidateToken(token, validationParameters, out validatedToken);
+
+        var userIdClaim = principal.FindFirst(ClaimTypes.NameIdentifier);
+        var userId = userIdClaim?.Value;
+
+        return userId;
+        }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using LayoutBuilder.Dtos.User;
+using LayoutBuilder.Utils;
 
 namespace LayoutBuilder.Controllers
 {
@@ -36,16 +37,22 @@ namespace LayoutBuilder.Controllers
             return Ok(await _userService.GetUserByUsername(username));
         }
 
-         [HttpDelete("users/{username}")]
+        [HttpDelete("users/{username}")]
         public async Task<ActionResult<User>> DeleteUserByUsername(string username) 
         {
-            return Ok(await _userService.GetUserByUsername(username));
+            var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            var userId = new JWTGenerator().DecodeJwtToken(token);
+
+            return Ok(await _userService.DeleteUserByUsername(username, userId));
         }
 
         [HttpPut("users/{username}")]
         public async Task<ActionResult<User>> UpdateUserByUsername(string username, UpdateUserDto updateUser) 
         {
-            return Ok(await _userService.UpdateUserByUsername(username, updateUser));
+            var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            var userId = new JWTGenerator().DecodeJwtToken(token);
+
+            return Ok(await _userService.UpdateUserByUsername(username, userId, updateUser));
         }
     }
 }

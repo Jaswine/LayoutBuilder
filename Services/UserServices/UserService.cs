@@ -24,12 +24,16 @@ namespace LayoutBuilder.Services.UserServices
             var userResponse = new UserResponse<User>();
             var user = new User();
 
-             var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == newUser.Email || u.Username == newUser.Username);
+            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == newUser.Email || u.Username == newUser.Username);
+            DateTime currentDateAndTime = DateTime.Now;
 
             if (existingUser is null) {
                 user.Username = newUser.Username;
                 user.Email = newUser.Email;
                 user.Password = newUser.Password;
+
+                user.UpdatedAt = currentDateAndTime;
+                user.CreatedAt = currentDateAndTime;
 
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
@@ -55,7 +59,7 @@ namespace LayoutBuilder.Services.UserServices
             if (user is not null)
             {
                 userResponse.Data = user;
-                    userResponse.Token = new JWTGenerator().GenerateJwtToken(user.Id.ToString());
+                userResponse.Token = new JWTGenerator().GenerateJwtToken(user.Id.ToString());
                 userResponse.Message = "User logged successfully";
                 return userResponse;
             } 
@@ -70,51 +74,55 @@ namespace LayoutBuilder.Services.UserServices
         {
             var userResponse = new UserResponse<User>();
 
-             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+             var user =  await _context.Users.Include(u => u.Collections).Include(u => u.Projects).Include(u => u.Comments).FirstOrDefaultAsync(u => u.Username == username);
             if (user is not null)
             {
                 userResponse.Data = user;
                 return userResponse;
             } 
             userResponse.Success = false;
-            userResponse.Message = "Project Not Found";
+            userResponse.Message = "User Not Found";
             return userResponse;
         }
 
         // ! __________ DELETE USER __________
-        public async  Task<UserResponse<User>> DeleteUserByUsername(string username)
+        public async  Task<UserResponse<User>> DeleteUserByUsername(string username, string userId)
         {
             var userResponse = new UserResponse<User>();
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
             if (user is not null)
             {
-                _context.Users.Remove(user);
-                await _context.SaveChangesAsync();
+                if (user.Id == int.Parse(userId)) {
+                    _context.Users.Remove(user);
+                    await _context.SaveChangesAsync();
 
-                userResponse.Data = user;
-                return userResponse;
+                    userResponse.Data = user;
+                    return userResponse;
+                }
             } 
             userResponse.Success = false;
-            userResponse.Message = "Project Not Found";
+            userResponse.Message = "User Not Found";
             return userResponse;
         }
 
         // ! __________ UPDATE USER __________
-        public async  Task<UserResponse<User>> UpdateUserByUsername(string username, UpdateUserDto updateUser)
+        public async  Task<UserResponse<User>> UpdateUserByUsername(string username, string userId, UpdateUserDto updateUser)
         {
             var userResponse = new UserResponse<User>();
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
             if (user is not null)
             {
-                user.ImageLink = updateUser.ImageLink;  
-                user.About = updateUser.About;
+                if (user.Id == int.Parse(userId)) {
+                    user.ImageLink = updateUser.ImageLink;  
+                    user.About = updateUser.About;
 
-                await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync();
 
-                userResponse.Data = user;
-                return userResponse;
+                    userResponse.Data = user;
+                    return userResponse;
+                }
             } 
             userResponse.Success = false;
             userResponse.Message = "Project Not Found";

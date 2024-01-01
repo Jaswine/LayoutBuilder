@@ -3,18 +3,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Azure.Core;
 using LayoutBuilder.Data;
+using LayoutBuilder.Dtos.Project;
 using Microsoft.EntityFrameworkCore; 
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using LayoutBuilder.Utils;
+
 
 namespace LayoutBuilder.Services.ProjectServices
 {
     public class ProjectService : IProjectService
     {
-        // private static List<Project> projects = new List<Project> {
-        //     new Project { Id = 1, Title = "Project 1", Data = "Data 1", IsPublic = true },
-        //     new Project { Id = 2, Title = "Project 2", Data = "Data 2", IsPublic = false}
-        // };
-
         private readonly DataContext _context;
         private readonly IMapper _mapper;
 
@@ -24,17 +28,42 @@ namespace LayoutBuilder.Services.ProjectServices
             _context = context;
         }
 
-        // ! _____________  SHOW ALL PROJECTS _____________
-        public async Task<ProjectResponse<List<Project>>> GetAllProjects()
+        // ! _____________  SHOW ALL USER PROJECTS _____________
+        public async Task<ProjectResponse<List<Project>>> GetAllProjects(string userId)
         {
             var projectResponse = new ProjectResponse<List<Project>>();
-            // projectResponse.Data = projects.Select(c => _mapper.Map<Project>(c)).ToList();
-            projectResponse.Data = await _context.Projects.Select(c => _mapper.Map<Project>(c)).ToListAsync();
+            projectResponse.Data = await _context.Projects.Where(p => p.UserId == int.Parse(userId)).ToListAsync();
             return projectResponse;
         }
 
+        // ! _____________  SHOW ALL PUBLIC PROJECTS _____________
+        public async Task<ProjectResponse<List<Project>>> GetAllPublicProjects()
+        {
+            var projectResponse = new ProjectResponse<List<Project>>();
+            projectResponse.Data = await _context.Projects.Where(p => p.IsPublic == true).ToListAsync();
+            return projectResponse;
+        }
+
+          // ! _____________  SHOW ONE PUBLIC PROJECT _____________
+        public async Task<ProjectResponse<Project>> GetOnePublicProject(int id)
+        {
+            var projectResponse = new ProjectResponse<Project>();
+
+            var project = await _context.Projects.Include(u => u.Comments).FirstOrDefaultAsync(p => p.Id == id);
+            if (project is not null)
+            {
+                projectResponse.Data = project;
+                return projectResponse;
+            } 
+
+            projectResponse.Success = false;
+            projectResponse.Message = "Project Not Found";
+            return projectResponse;
+        }
+
+
         // ! _____________  SHOW ONE PROJECT _____________
-        public async  Task<ProjectResponse<Project>> GetProjectById(int id)
+        public async  Task<ProjectResponse<Project>> GetProjectById(int id, string userId)
         {
             var projectResponse = new ProjectResponse<Project>();
 
@@ -42,55 +71,72 @@ namespace LayoutBuilder.Services.ProjectServices
             var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == id);
             if (project is not null)
             {
-                projectResponse.Data = project;
-                return projectResponse;
+                if (project.UserId == int.Parse(userId)) {
+                    projectResponse.Data = project;
+                    return projectResponse;
+                }
             } 
+
             projectResponse.Success = false;
             projectResponse.Message = "Project Not Found";
             return projectResponse;
         }
 
         // ! _____________  CREATE A NEW PROJECT _____________
-        public async Task<ProjectResponse<Project>> AddProject(Project newProject)
+        public async Task<ProjectResponse<Project>> AddProject(string userId, CreateProjectDto newProject)
         {
             var projectResponse = new ProjectResponse<Project>();
+            DateTime currentDateAndTime = DateTime.Now;
 
-            _context.Projects.Add(newProject);
+            var project = new Project();
+            project.Title = newProject.Title;
+            project.IsPublic = false;
+           
+            project.UserId = int.Parse(userId);
+
+            project.UpdatedAt = currentDateAndTime;
+            project.CreatedAt = currentDateAndTime;
+
+            _context.Projects.Add(project);
             await _context.SaveChangesAsync();
 
             projectResponse.Message = "Project created successfully";
-            projectResponse.Data = newProject;
+            projectResponse.Data = project;
 
             return projectResponse;
         }
-
+        
         // ! _____________  UPDATE PROJECT _____________
-        public async Task<ProjectResponse<Project>> UpdateProject(int id, Project updatedProject)
+        public async Task<ProjectResponse<Project>> UpdateProject(int id, string userId, UpdateProjectDto updatedProject)
         {
             var projectResponse = new ProjectResponse<Project>();
+            DateTime currentDateAndTime = DateTime.Now;
 
             var existingProject = await _context.Projects.FirstOrDefaultAsync(p => p.Id == id);
 
             if (existingProject is not null)
             {
-                // TODO: title's checking
-                if (updatedProject.Title is not null && updatedProject.Title.Length > 0 && updatedProject.Title != existingProject.Title)
-                {
-                    existingProject.Title = updatedProject.Title;
+                if (existingProject.UserId == int.Parse(userId)) {
+                    if (updatedProject.Title is not null && updatedProject.Title.Length > 0 && updatedProject.Title != existingProject.Title)
+                    {
+                        existingProject.Title = updatedProject.Title;
+                    }
+
+                    if (updatedProject.Data is not null && updatedProject.Data.Length > 0 && updatedProject.Data != existingProject.Data)
+                    {
+                        existingProject.Data = updatedProject.Data;
+                    }
+
+                    existingProject.IsPublic = updatedProject.IsPublic;
+                    existingProject.UpdatedAt = currentDateAndTime;
+
+                    await _context.SaveChangesAsync();
+
+                    projectResponse.Message = "Project updated successfully";
+                    projectResponse.Data = existingProject;
+
+                    return projectResponse;
                 }
-
-                // TODO: data checking
-                if (updatedProject.Data is not null && updatedProject.Data.Length > 0 && updatedProject.Data != existingProject.Data)
-                {
-                    existingProject.Data = updatedProject.Data;
-                }
-
-                await _context.SaveChangesAsync();
-
-                projectResponse.Message = "Project updated successfully";
-                projectResponse.Data = existingProject;
-
-                return projectResponse;
             }
             
             projectResponse.Success = false;
@@ -99,7 +145,7 @@ namespace LayoutBuilder.Services.ProjectServices
         }
 
         // ! _____________  REMOVE ONE PROJECT _____________
-        public async  Task<ProjectResponse<Project>> RemoveProjectById(int id)
+        public async  Task<ProjectResponse<Project>> RemoveProjectById(int id, string userId)
         {
             var projectResponse = new ProjectResponse<Project>();
 
@@ -108,11 +154,13 @@ namespace LayoutBuilder.Services.ProjectServices
 
             if (project is not null)
             {
-                _context.Projects.Remove(project);
-                await _context.SaveChangesAsync();
+                if (project.UserId == int.Parse(userId)) {
+                    _context.Projects.Remove(project);
+                    await _context.SaveChangesAsync();
 
-                projectResponse.Message = "Project removed successfully!";
-                return projectResponse;
+                    projectResponse.Message = "Project removed successfully!";
+                    return projectResponse;
+                }
             } 
             projectResponse.Success = false;
             projectResponse.Message = "Project Not Found";
