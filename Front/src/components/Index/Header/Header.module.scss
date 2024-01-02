@@ -1,0 +1,28 @@
+@import './../../../assets/scss/variavles.scss';
+
+.header {
+    @apply flex justify-between items-center w-full p-6 pr-20 pl-20;
+    height: 10vh;
+}
+.header__left {
+    @apply flex justify-center items-center gap-6
+}
+.header__left a {
+    @apply text-zinc-600 relative;
+}
+.header__left a::after {
+    @apply rounded-full block w-full absolute bottom-0 opacity-0 transition-all delay-300 ease-linear; 
+    content: "";
+    height: 2px;
+    background-color: $pink;
+}
+.header__left a:hover:after {
+    @apply opacity-100
+}
+ 
+.header__right {
+    @apply flex justify-center items-center
+}
+.header__right a {
+    @apply text-2xl p-1 rounded-full bg-zinc-200 text-zinc-600;
+}

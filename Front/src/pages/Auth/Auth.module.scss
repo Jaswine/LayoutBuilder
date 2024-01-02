@@ -1,0 +1,67 @@
+@import './../../assets/scss/variavles.scss'; 
+
+.page {
+    @apply flex justify-center items-center flex-col w-full rounded-sm w-screen h-screen;
+}
+.form {
+    @apply flex justify-center items-start flex-col rounded-md p-8 pt-10 pb-8 w-full relative bg-white z-10;
+    max-width: 440px;
+    border: 2px solid rgb(20,20,20, .08);
+    box-shadow:  0 0 10px rgba(20,20,20, .08);
+}
+.form h1 {
+    @apply font-black  text-5xl;
+}
+.form p {
+    @apply mb-4 text-lg mt-1  text-zinc-500;
+}
+.form__field {
+    @apply flex justify-start items-start flex-col w-full mb-4;
+}
+.form__field label {
+    @apply text-base text-zinc-500;
+}
+.form__field input {
+    @apply p-2 w-full rounded-md;
+    border: 2px solid rgb(20,20,20, .2);
+}
+.form span {
+    @apply mt-6 text-zinc-500 m-auto;
+}
+.form button {
+    @apply mt-4 m-auto;
+}
+.form span a {
+    @apply font-bold;
+    color: $primary;
+}
+.form span a:hover {
+    color: $pink;
+}
+
+.page::after {
+    @apply rounded-full absolute;
+    display: block;
+    content: "";
+    width: 10px;
+    height: 10px;
+    background-color: rgba(245, 72, 127, 0.50);
+    box-shadow: 0px 0px 200px 200px rgba(245, 72, 127, 0.50);
+    z-index: 1;
+    bottom: 10%;
+    left: 40%;
+    z-index: -1;
+}
+
+.page::before {
+    @apply rounded-full absolute;
+    display: block;
+    content: "";
+    width: 10px;
+    height: 10px;
+    background-color: rgb(127, 72, 245, .7);
+    box-shadow: 0px 0px 150px 150px rgb(127, 72, 245, .7);
+    z-index: 1;
+    left: 70%;
+    top: 40%
+}

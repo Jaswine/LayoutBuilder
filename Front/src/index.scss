@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import './assets/scss/variavles.scss';
+
+* {
+    @apply box-border p-0 m-0;
+}
+body {
+    @apply w-full overflow-x-hidden text-lg bg-white;
+    color: $primary;
+    font-family: $Inter;
+}
+a {
+    @apply transition-all delay-300 ease-linear;
+}
+a:hover {
+    color: $pink;
+}
+button {
+    @apply p-2 pr-6 pl-6 text-white rounded-md flex justify-center items-center gap-2 transition-all delay-300 ease-linear;
+    background-color: $pink;
+    font-weight: 500
+}
+button:hover {
+    background-color: $primary;
+    box-shadow: 0 0 10px 1px rgb(20,20,20, .1);
+}
+input {
+    @apply outline-none p-2 text-lg transition-all delay-300 ease-linear;
+}
+::selection {
+    background-color: $pink;
+    // color: $primary;
+    color: $white;
+}
+::-webkit-scrollbar {
+    background-color: transparent;
+    width: 10px;
+}
+::-webkit-scrollbar-thumb {
+    @apply rounded-sm;
+    background-color: rgb(245, 72, 127, .3);
+}
+input:hover {
+    border-color: $pink;
+}
+input:focus {
+    border-width: 3px;
+    border-color: $pink;
+}

@@ -1,0 +1,12 @@
+@import './../../assets/scss/variavles.scss';
+
+.message {
+    @apply flex justify-start items-center p-2 pl-6 pr-6 fixed z-50 bg-white rounded-md top-5 left-5 font-bold gap-2;
+    max-width: 60vw;
+    color: $pink;
+    box-shadow:  0 0 10px rgb(20,20,20, .07);
+    border: 2px solid rgba(20,20,20,.07);
+}
+.message svg {
+    @apply text-xl
+}
