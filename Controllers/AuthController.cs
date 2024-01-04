@@ -37,6 +37,12 @@ namespace LayoutBuilder.Controllers
             return Ok(await _userService.GetUserByUsername(username));
         }
 
+        [HttpGet("users/{username}/public")]
+        public async Task<ActionResult<User>> GetUserPublicByUsername(string username) 
+        {
+            return Ok(await _userService.GetUserPublicProjects(username));
+        }
+
         [HttpDelete("users/{username}")]
         public async Task<ActionResult<User>> DeleteUserByUsername(string username) 
         {

@@ -43,7 +43,7 @@ namespace LayoutBuilder.Controllers
         {
             return Ok( await _projectService.GetOnePublicProject(id));
         }
-
+        
         [HttpGet("dashboard/{id}")]
         public async Task<ActionResult<Project>> GetSingle(int id) 
         {

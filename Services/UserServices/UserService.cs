@@ -44,7 +44,7 @@ namespace LayoutBuilder.Services.UserServices
 
                 return userResponse;   
             } else {
-                userResponse.Message = "User is exist";
+                userResponse.Message = "User is exist, change your username or email address";
                 userResponse.Success = false;
                 return userResponse;   
             }
@@ -74,7 +74,23 @@ namespace LayoutBuilder.Services.UserServices
         {
             var userResponse = new UserResponse<User>();
 
-             var user =  await _context.Users.Include(u => u.Collections).Include(u => u.Projects).Include(u => u.Comments).FirstOrDefaultAsync(u => u.Username == username);
+            var user =  await _context.Users.Include(u => u.Collections).Include(u => u.Projects).Include(u => u.Comments).FirstOrDefaultAsync(u => u.Username == username);
+            if (user is not null)
+            {
+                userResponse.Data = user;
+                return userResponse;
+            } 
+            userResponse.Success = false;
+            userResponse.Message = "User Not Found";
+            return userResponse;
+        }
+
+         // ! __________ SHOW PUBLIC PROJECTS __________
+          public async  Task<UserResponse<User>> GetUserPublicProjects(string username)
+        {
+            var userResponse = new UserResponse<User>();
+
+            var user =  await _context.Users.Include(u => u.Collections).Include(u => u.Projects.Where(p=> p.IsPublic == true)).Include(u => u.Comments).FirstOrDefaultAsync(u => u.Username == username);
             if (user is not null)
             {
                 userResponse.Data = user;

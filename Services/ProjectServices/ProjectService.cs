@@ -36,6 +36,7 @@ namespace LayoutBuilder.Services.ProjectServices
             return projectResponse;
         }
 
+
         // ! _____________  SHOW ALL PUBLIC PROJECTS _____________
         public async Task<ProjectResponse<List<Project>>> GetAllPublicProjects()
         {
@@ -122,7 +123,7 @@ namespace LayoutBuilder.Services.ProjectServices
                         existingProject.Title = updatedProject.Title;
                     }
 
-                    if (updatedProject.Data is not null && updatedProject.Data.Length > 0 && updatedProject.Data != existingProject.Data)
+                    if (updatedProject.Data is not null && updatedProject.Data.Length > 0)
                     {
                         existingProject.Data = updatedProject.Data;
                     }
