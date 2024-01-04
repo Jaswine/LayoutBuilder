@@ -3,6 +3,7 @@ import styles from "./Auth.module.scss"
 import { Link, useNavigate } from "react-router-dom"
 import { useAuth } from "../../hooks/useAuth"
 import { $axios } from "../../api"
+import Message from "../../components/Message/Message"
 
 
 const SignUp:FC = () => {
@@ -16,6 +17,9 @@ const SignUp:FC = () => {
 
     useEffect(() => {
         document.title = 'Sign Up'
+
+        const localStorageEmail = localStorage.getItem('email')
+        localStorageEmail && setEmail(localStorageEmail)
 
         isAuth && navigate('/dashboard')
     }, [])
@@ -37,16 +41,20 @@ const SignUp:FC = () => {
             .then(res => {
                 console.log(res.data)
 
-                setIsAuth(true)
-                localStorage.setItem('token', res.data.token)
+                if (res.data.success) {
+                    setIsAuth(true)
+                    localStorage.setItem('authToken', res.data.token)
 
-                setAuthEmail(res.data.data.email)
-                localStorage.setItem('token', res.data.data.email)
+                    setAuthEmail(res.data.data.email)
+                    localStorage.setItem('authEmail', res.data.data.email)
 
-                setAuthUsername(res.data.data.username)
-                localStorage.setItem('token', res.data.data.email)
+                    setAuthUsername(res.data.data.username)
+                    localStorage.setItem('authUsername', res.data.data.username)
 
-                navigate('/dashboard')
+                    navigate('/dashboard')
+                } else {
+                    setErrorMessage(res.data.message)
+                }
             })
             .catch(err => {
                 console.log(err)
@@ -55,6 +63,7 @@ const SignUp:FC = () => {
 
     return (
     <div className={styles.page}>
+        {errorMessage && <Message>{ errorMessage }</Message>}
         <form className={styles.form} method="post" onSubmit={authorization}>
             <h1>Sign Up</h1>
             <p>Register to continue using the site!</p>

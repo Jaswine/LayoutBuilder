@@ -1,0 +1,52 @@
+@import './../../assets/scss/variavles.scss';
+
+.page {
+    @apply w-full flex justify-center items-start relative w-screen h-screen overflow-hidden pb-10;
+}
+.page__right {
+    @apply w-full flex justify-start items-start flex-col p-6 pl-6 pr-6 overflow-y-auto relative h-screen;
+
+    h1 {
+        @apply text-3xl font-bold mt-5 mb-5;
+    }
+    &__creator {
+        @apply flex justify-between items-center w-full mt-2 mb-2;
+        &__left {
+            @apply flex justify-center items-center gap-2 ;
+            height: 50px;
+
+            img {
+                @apply rounded-full object-cover;
+                width: 50px;
+                height: 50px;
+            }
+            div {
+                @apply flex flex-col justify-center  h-full;
+                 a {
+                    @apply text-xl font-bold;
+                 }
+                 span {
+                    @apply text-base text-zinc-400;
+                 }
+            }
+        }
+        &__right {
+            @apply flex justify-center items-center;
+            button {
+                @apply bg-transparent rounded-md p-2;
+                color: rgb(20,20,20,.3);
+                border: 2px solid  rgb(20,20,20,.3);
+
+                &:hover {
+                    @apply bg-transparent;
+                    border-color: $pink;
+                    color: $pink
+                }
+            }
+        }
+    }
+    &__maket {
+        @apply flex justify-center items-center flex-col w-full mt-6 mb-6 rounded-md p-4;
+        border: 1px solid rgb(20,20,20,.1); 
+    }
+}

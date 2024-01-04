@@ -1,9 +1,18 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import styles from './Intro.module.scss'
 import { MdOutlineEmail } from "react-icons/md";
 import { FaArrowRight } from "react-icons/fa6";
+import { Link, useNavigate } from "react-router-dom";
 
 const Intro:FC = () => {
+    const [email, setEmail] = useState<string>('')
+    const navigate = useNavigate()
+
+    const goToSignUp = () => {
+        localStorage.setItem('email', email)
+        navigate('/sign-up')
+    }
+
     return (
         <div className={styles.intro}>
             <div className={styles.intro__left}>
@@ -14,8 +23,10 @@ const Intro:FC = () => {
                     <MdOutlineEmail />
                     <input 
                         type="email"
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
                         placeholder="Enter your email address" />
-                    <button className="btn">Registration <FaArrowRight className='button__icon' /></button>
+                    <button onClick={goToSignUp} className="btn">Registration <FaArrowRight className='button__icon' /></button>
                 </div>
             </div>
             <div className={styles.intro__right}>

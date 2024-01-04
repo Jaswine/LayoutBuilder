@@ -1,0 +1,52 @@
+.page__left {
+    @apply w-full flex justify-between items-start flex-col p-1 pr-4 pl-4 h-full pb-3;
+    width: 260px;
+    height: 100vh;
+    border-right: 1px solid rgb(20,20,20,.15)
+}
+.page__footer, .page__top {
+    @apply w-full;
+}
+.page__left__header {
+    @apply w-full flex justify-start items-center mb-3;
+    gap: 8px;
+    height: 10vh;
+
+    img  {
+        @apply rounded-full object-cover;
+        width: 40px;
+        height: 40px;
+    }
+}
+.page__left__footer {
+    @apply w-full ;
+
+    button {
+        @apply w-full flex items-center;
+    }
+}
+.page__left__header__desc {
+    @apply flex justify-start items-start flex-col;
+
+    span {
+        @apply text-sm;
+        color: rgb(20,20,20,.5);
+    }
+}
+
+.page__left__menu {
+    @apply flex justify-center items-start flex-col w-full;
+    
+    a {
+        @apply flex items-center w-full p-2 pl-4 pr-4 rounded-md gap-3 cursor-pointer text-zinc-800 mb-4;
+        font-weight: 500;
+
+        svg {
+            @apply text-2xl;
+        }
+
+        &:hover {
+           background-color: rgb(20,20,20,.03)
+        }
+    }
+}

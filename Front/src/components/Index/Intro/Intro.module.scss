@@ -29,8 +29,12 @@
     @apply text-xl;
     color: rgb(20,20,20, .3);
 }
-.intro__left__email input {
-
+.intro__left__email input:focus {
+    font-weight: 2;
+    border-color: transparent;
+}
+.intro__left__email input:hover {
+    border-color: transparent;
 }
 .intro__left__email button svg {
     color: white
