@@ -4,14 +4,11 @@ import AuthContextProps from "./AuthProviderInterface";
 export const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 
 const AuthProvider: FC = ({ children }) => {
-    const [isAuth, setIsAuth] = useState<boolean>(false)
+    const [isAuth, setIsAuth] = useState<boolean>( localStorage.getItem('authToken')? true : false );
     const [authUsername, setAuthUsername] = useState<string>("")
     const [authEmail, setAuthEmail] = useState<string>("")
 
     useEffect(() => {
-        const authToken = localStorage.getItem('authToken')
-        setIsAuth(!!authToken)
-
         const storedUsername = localStorage.getItem('authUsername');
         setAuthUsername(storedUsername || '');
 

@@ -18,21 +18,6 @@ namespace LayoutBuilder.Services.CommentServices
             _context = context;
         }
 
-        // ! _____________  SHOW ALL COMMENTS _____________
-        public async Task<CommentResponse<List<Comment>>> GetAllComments(int id)
-        {
-            var commentResponse = new CommentResponse<List<Comment>>();
-
-            var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == id);
-
-            if (project is not null) {
-                commentResponse.Data = await _context.Comments.Where(p => p.ProjectId == id).ToListAsync();
-            } else {
-                commentResponse.Success = false;
-                commentResponse.Message = "Project not found";
-            }
-            return commentResponse;
-        }
 
         // ! _____________  CREATE A NEW COMMENT _____________
         public async Task<CommentResponse<Comment>> CreateNewComment(int id, string userId, CreateCommentDto newComment)

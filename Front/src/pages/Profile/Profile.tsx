@@ -1,19 +1,26 @@
 import { FC, useEffect, useState } from "react";
 import styles from './Profile.module.scss'
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { $axios } from "../../api";
 import NavBar from "../../components/NavBar/NavBar";
+import { useAuth } from "../../hooks/useAuth";
 
 const Profile:FC = () => {
     const { username } = useParams()
+    const navigate = useNavigate()
+    const {isAuth} = useAuth()
     const [profile, setProfile] = useState([])
     const [publicProjects, setPublicProjects] = useState([])
 
     useEffect(() => {
         document.title = `${username}`
 
+        if (!isAuth) {
+            navigate('/sign-in')
+        }
+
         getProfileData()
-    }, [])
+    }, [username])
 
     const getProfileData = () => {
         $axios(`/auth/users/${username}/public`)

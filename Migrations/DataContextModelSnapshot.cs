@@ -45,6 +45,21 @@ namespace LayoutBuilder.Migrations
                     b.ToTable("Collections");
                 });
 
+            modelBuilder.Entity("LayoutBuilder.Models.CollectionProject", b =>
+                {
+                    b.Property<int>("CollectionId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("CollectionId", "ProjectId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("CollectionProjects");
+                });
+
             modelBuilder.Entity("LayoutBuilder.Models.Comment", b =>
                 {
                     b.Property<int>("Id")
@@ -81,13 +96,17 @@ namespace LayoutBuilder.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("CollectionId")
+                    b.Property<bool>("AllowComments")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Data")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsPublic")
@@ -104,8 +123,6 @@ namespace LayoutBuilder.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CollectionId");
 
                     b.HasIndex("UserId");
 
@@ -160,6 +177,25 @@ namespace LayoutBuilder.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("LayoutBuilder.Models.CollectionProject", b =>
+                {
+                    b.HasOne("LayoutBuilder.Models.Collection", "Collection")
+                        .WithMany("CollectionProjects")
+                        .HasForeignKey("CollectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LayoutBuilder.Models.Project", "Project")
+                        .WithMany("CollectionProjects")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Collection");
+
+                    b.Navigation("Project");
+                });
+
             modelBuilder.Entity("LayoutBuilder.Models.Comment", b =>
                 {
                     b.HasOne("LayoutBuilder.Models.Project", "Project")
@@ -181,10 +217,6 @@ namespace LayoutBuilder.Migrations
 
             modelBuilder.Entity("LayoutBuilder.Models.Project", b =>
                 {
-                    b.HasOne("LayoutBuilder.Models.Collection", null)
-                        .WithMany("Projects")
-                        .HasForeignKey("CollectionId");
-
                     b.HasOne("LayoutBuilder.Models.User", "User")
                         .WithMany("Projects")
                         .HasForeignKey("UserId")
@@ -196,11 +228,13 @@ namespace LayoutBuilder.Migrations
 
             modelBuilder.Entity("LayoutBuilder.Models.Collection", b =>
                 {
-                    b.Navigation("Projects");
+                    b.Navigation("CollectionProjects");
                 });
 
             modelBuilder.Entity("LayoutBuilder.Models.Project", b =>
                 {
+                    b.Navigation("CollectionProjects");
+
                     b.Navigation("Comments");
                 });
 

@@ -19,16 +19,16 @@ namespace LayoutBuilder.Controllers
         {
             _collectionService = collectionService;
         }
-        
-        [HttpGet("list")]
-        public async Task<ActionResult<List<Collection>>> Get() 
+
+        [HttpGet]
+        public async Task<ActionResult<List<Collection>>> GetAllCollections()
         {
             var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             var userId = new JWTGenerator().DecodeJwtToken(token);
 
             return Ok( await _collectionService.GetAllCollections(userId));
         }
-
+        
         [HttpGet("{id}")]
         public async Task<ActionResult<Collection>> GetSingle(int id) 
         {
@@ -48,12 +48,21 @@ namespace LayoutBuilder.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Collection>> UpdateCollection(int id, CreateCollectionDto  updatedCollection) 
+        public async Task<ActionResult<Collection>> UpdateTitleCollection(int id, CreateCollectionDto  updatedCollection) 
         {
             var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             var userId = new JWTGenerator().DecodeJwtToken(token);
 
             return Ok(await _collectionService.UpdateCollection(id, userId, updatedCollection));
+        }
+
+        [HttpPut("{id}/addNewProject")]
+        public async Task<ActionResult<Collection>> AddProjectToCollection(int id, UpdateProjectsCollectionDto  updatedCollection) 
+        {
+            var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            var userId = new JWTGenerator().DecodeJwtToken(token);
+
+            return Ok(await _collectionService.AddProjectToCollection(id, userId, updatedCollection));
         }
 
         [HttpDelete("{id}")]

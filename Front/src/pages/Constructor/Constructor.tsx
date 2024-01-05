@@ -14,7 +14,7 @@ import { useAuth } from "../../hooks/useAuth";
 
 const Constructor:FC = () => {
     const {id} = useParams()
-    const {authUsername} = useAuth()
+    const {authUsername, isAuth} = useAuth()
     const navigate = useNavigate()
     const [project, setProject] = useState({})
 
@@ -30,15 +30,18 @@ const Constructor:FC = () => {
     useEffect(() => {
         document.title = 'Constructor'
 
+        if (!isAuth) {
+            navigate('/sign-in')
+        }
         getProjectData()
-    }, [])
+    }, [id])
 
     useEffect(() => {
         if (mainMenu == 'ElementsMenu') {
             setMainMenuPlace(MenuElements)
             console.log(mainMenuPlace)
         }
-    }, [mainMenu])
+    }, [id, mainMenu])
     
 
     const renderTemplate = (data) => {

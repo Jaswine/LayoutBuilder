@@ -46,7 +46,44 @@
         }
     }
     &__maket {
-        @apply flex justify-center items-center flex-col w-full mt-6 mb-6 rounded-md p-4;
+        @apply flex justify-center items-center flex-col w-full mt-6 mb-6 rounded-md p-4 ;
         border: 1px solid rgb(20,20,20,.1); 
+    }
+}
+
+.page__right__create__comment {
+    @apply flex justify-between items-center w-full mb-6 gap-4;
+    // max-width: 60vw;
+    input {
+        @apply w-full rounded-lg;
+        border: 2px solid rgb(20,20,20,.1);
+    }
+}
+.page__comments {
+    @apply flex justify-center items-center flex-col w-full mb-10;
+
+    &__all {
+        @apply grid w-full;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 2%;
+    }
+    .page__comment {
+        @apply bg-zinc-100 rounded-md p-4; 
+        &__header {
+            @apply flex justify-between items-center;
+
+            a {
+                font-weight: 600;
+            }
+            span {
+                @apply text-sm text-zinc-500; 
+            }
+        }
+        &__body {
+            @apply text-base ;
+        }
+    }
+    h2 {
+        @apply font-bold text-xl
     }
 }

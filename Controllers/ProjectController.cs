@@ -31,13 +31,6 @@ namespace LayoutBuilder.Controllers
             return Ok( await _projectService.GetAllProjects(userId));
         }
 
-         [HttpGet("list")]
-        public async Task<ActionResult<List<Project>>> GetPublicProjects() 
-        {
-
-            return Ok( await _projectService.GetAllPublicProjects());
-        }
-
         [HttpGet("{id}")]
         public async Task<ActionResult<Project>> GetPublicSingle(int id) 
         {
@@ -50,7 +43,9 @@ namespace LayoutBuilder.Controllers
             var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             var userId = new JWTGenerator().DecodeJwtToken(token);
 
-            return Ok( await _projectService.GetProjectById(id, userId));
+            var response = await _projectService.GetProjectById(id, userId);
+            
+            return response.Success ? Ok(response) : NotFound(response);
         }
 
         [HttpPost]
@@ -62,13 +57,31 @@ namespace LayoutBuilder.Controllers
             return Ok(await _projectService.AddProject(userId, newProject));
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<Project>> UpdateProject(int id, UpdateProjectDto  updatedProject) 
+        [HttpPut("{id}/public")]
+        public async Task<ActionResult<Project>> UpdateProjectToPublic(int id, UpdateProjectPublicDto  updatedProject) 
         {
             var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             var userId = new JWTGenerator().DecodeJwtToken(token);
 
-            return Ok(await _projectService.UpdateProject(id, userId, updatedProject));
+            return Ok(await _projectService.UpdateProjectToPublic(id, userId, updatedProject));
+        }
+
+        [HttpPut("{id}/title")]
+        public async Task<ActionResult<Project>> UpdateTitleProject(int id, UpdateProjectTitleDto  updatedProject) 
+        {
+            var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            var userId = new JWTGenerator().DecodeJwtToken(token);
+
+            return Ok(await _projectService.UpdateProjectTitle(id, userId, updatedProject));
+        }
+
+        [HttpPut("{id}/data")]
+        public async Task<ActionResult<Project>> UpdateDataProject(int id, UpdateProjectDataDto  updatedProject) 
+        {
+            var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            var userId = new JWTGenerator().DecodeJwtToken(token);
+
+            return Ok(await _projectService.UpdateProjectData(id, userId, updatedProject));
         }
 
         [HttpDelete("{id}")]

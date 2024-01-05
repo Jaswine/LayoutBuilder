@@ -13,7 +13,7 @@ namespace LayoutBuilder.Models
         public int UserId { get; set; }
         public User User { get; set; }
 
-        public List<Project> Projects { get; set; }
+        public List<CollectionProject> CollectionProjects { get; set; }
 
         public bool IsFavorite { get; set; }
 

@@ -15,7 +15,10 @@ namespace LayoutBuilder.Models
         public User User { get; set; }
 
         public List<Comment> Comments { get; set; }
+        public List<CollectionProject> CollectionProjects { get; set; }
 
+        public string Description { get; set; }
+        public bool AllowComments { get; set; } = false;
 
         public bool IsPublic { get; set; } = false;
 

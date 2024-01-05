@@ -15,7 +15,11 @@ const Dashboard:FC = () => {
 
     useEffect(() => {
         document.title = 'Dashboard'
-    }, [])
+
+        if (!isAuth) {
+            navigate('/sign-in')
+        }
+    }, [isAuth])
 
     useEffect(() => {
         getUserData()

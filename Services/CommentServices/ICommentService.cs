@@ -8,7 +8,6 @@ namespace LayoutBuilder.Services.CommentServices
 {
     public interface ICommentService
     {
-        Task<CommentResponse<List<Comment>>> GetAllComments(int id);
         Task<CommentResponse<Comment>> CreateNewComment(int id, string userId, CreateCommentDto newComment);
         Task<CommentResponse<Comment>> RemoveComment(int id, int commentId, string userId);
     }

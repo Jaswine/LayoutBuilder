@@ -23,12 +23,6 @@ namespace LayoutBuilder.Controllers
             _commentService = commentService;
         }
 
-        [HttpGet("{id}/comments")]
-        public async Task<ActionResult<List<Comment>>> GetAllComments(int id) 
-        {
-            return Ok( await _commentService.GetAllComments(id));
-        }
-
         [HttpPost("{id}/comments")]
         public async Task<ActionResult<Comment>> AddComment(int id, CreateCommentDto newComment) 
         {

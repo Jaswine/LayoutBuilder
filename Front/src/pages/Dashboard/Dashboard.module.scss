@@ -40,7 +40,7 @@
 
 
 .page__right__projects {
-    @apply flex z-10 justify-start flex-col w-full overflow-y-scroll relative pr-2 pl-4 ;
+    @apply flex z-10 justify-start flex-col w-full overflow-y-scroll relative pr-2 pl-4 pb-20;
     height: 80vh;
 
     .page__projects {
