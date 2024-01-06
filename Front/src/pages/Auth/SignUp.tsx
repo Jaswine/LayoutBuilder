@@ -52,6 +52,7 @@ const SignUp:FC = () => {
                     localStorage.setItem('authUsername', res.data.data.username)
 
                     navigate('/dashboard')
+                    window.location.reload()
                 } else {
                     setErrorMessage(res.data.message)
                 }

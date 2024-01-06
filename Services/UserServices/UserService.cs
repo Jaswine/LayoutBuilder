@@ -74,7 +74,12 @@ namespace LayoutBuilder.Services.UserServices
         {
             var userResponse = new UserResponse<User>();
 
-            var user =  await _context.Users.Include(u => u.Collections).Include(u => u.Projects).Include(u => u.Comments).FirstOrDefaultAsync(u => u.Username == username);
+            var user =  await _context.Users
+                .Include(u => u.Collections)
+                .Include(u => u.Projects)
+                .Include(u => u.Comments)
+                .FirstOrDefaultAsync(u => u.Username == username);
+                
             if (user is not null)
             {
                 userResponse.Data = user;
@@ -131,12 +136,15 @@ namespace LayoutBuilder.Services.UserServices
             if (user is not null)
             {
                 if (user.Id == int.Parse(userId)) {
+                    user.Username = updateUser.Username;
+                    user.Email = updateUser.Email;
                     user.ImageLink = updateUser.ImageLink;  
                     user.About = updateUser.About;
 
                     await _context.SaveChangesAsync();
 
                     userResponse.Data = user;
+                    userResponse.Message = "User updated successfully";
                     return userResponse;
                 }
             } 

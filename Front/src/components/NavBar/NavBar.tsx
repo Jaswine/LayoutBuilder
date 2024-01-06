@@ -8,6 +8,7 @@ import { FiLogOut } from "react-icons/fi";
 import { useAuth } from "../../hooks/useAuth";
 import { $axios } from "../../api";
 import { Link, useNavigate } from "react-router-dom";
+import { LuSettings2 } from "react-icons/lu";
 
 
 const NavBar:FC = () => {
@@ -42,7 +43,7 @@ const NavBar:FC = () => {
 
             <div className={styles.page__top}>
                 <div className={styles.page__left__header}>
-                    <img src="https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="image" />
+                    <img src={userData.imageLink || '/public/ImageNotFound.jpg'} alt="image" />
                     <div className={styles.page__left__header__desc}>
                         <Link to={`/profile/${authUsername}`}>{authUsername}</Link>
                         <span>{authEmail}</span>
@@ -53,6 +54,7 @@ const NavBar:FC = () => {
                     <Link to='/dashboard'><LuLayoutDashboard />All Projects</Link>
                     <a><HiOutlineCollection /> Collections</a>
                     <Link to='/favorites'><FaRegStar /> Favorites</Link>
+                    <Link to='/settings'><LuSettings2 /> Settings</Link>
                 </div>
             </div>
 

@@ -1,3 +1,5 @@
+@import './../../assets/scss/variables.scss';
+
 .page {
     @apply w-full flex justify-center items-start relative w-screen h-screen overflow-hidden;
 }
@@ -5,26 +7,25 @@
     @apply flex items-center flex-col p-4 pl-12 pr-12 w-full;
 }
 .profile__data {
-    @apply flex justify-center items-center mb-5 pt-4 pb-4;
+    @apply flex justify-center items-center flex-col mb-5 pt-4 pb-4 w-full;
 
     .profile__info {
-        @apply flex justify-start items-center gap-4 w-full ;
+        @apply flex justify-start items-start gap-4 w-full ;
 
         img {
             @apply object-cover rounded-full;
             width: 150px;
             height: 150px;
+            border: 4px solid $pink;
         }
         &__desc {
+            @apply pt-5;
             h1 {
                 @apply font-bold text-5xl
             }
             h2 {
                 @apply font-bold text-xl
             }
-        }
-        p {
-
         }
     }
 }

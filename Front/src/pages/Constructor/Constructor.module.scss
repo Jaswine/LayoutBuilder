@@ -1,4 +1,4 @@
-@import './../../assets/scss/variavles.scss';
+@import './../../assets/scss/variables.scss';
 
 .page {
     @apply flex justify-center items-center flex-col w-full h-screen overflow-hidden;
@@ -127,15 +127,34 @@
     &__body {
         @apply flex w-full justify-center items-center flex-col;
 
-
         .form__component {
             @apply flex flex-col w-full mb-4;
             label {
                 @apply text-lg text-zinc-400;
             }
-            input {
-                @apply rounded-md;
+            input, textarea {
+                @apply rounded-md p-2 outline-none;
                 border: 2px solid rgb(20,20,20,.2);
+
+                &:hover, &:focus {
+                    border-color: $pink;
+                }
+            }
+            input[type="checkbox"] {
+                appearance: none;
+                -webkit-appearance: none;
+                -moz-appearance: none; 
+                border-style: solid;
+                border-width: 2px;
+                border-color: rgb(20,20,20,.2); 
+                border-radius: 6px;
+                width: 26px;
+                height: 26px;
+                cursor: pointer;
+            }
+            input[type="checkbox"]:checked {
+                background-color: $pink;
+                border-color: $pink;
             }
         }
     }

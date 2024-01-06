@@ -5,16 +5,8 @@ export const AuthContext = createContext<AuthContextProps>({} as AuthContextProp
 
 const AuthProvider: FC = ({ children }) => {
     const [isAuth, setIsAuth] = useState<boolean>( localStorage.getItem('authToken')? true : false );
-    const [authUsername, setAuthUsername] = useState<string>("")
-    const [authEmail, setAuthEmail] = useState<string>("")
-
-    useEffect(() => {
-        const storedUsername = localStorage.getItem('authUsername');
-        setAuthUsername(storedUsername || '');
-
-        const storedEmail = localStorage.getItem('authEmail');
-        setAuthEmail(storedEmail || '');
-    }, [])
+    const [authUsername, setAuthUsername] = useState<string>(localStorage.getItem('authUsername') || '')
+    const [authEmail, setAuthEmail] = useState<string>(localStorage.getItem('authEmail') || '')
 
     return (
         <AuthContext.Provider value={{isAuth, setIsAuth, authUsername, setAuthUsername, authEmail, setAuthEmail}}>

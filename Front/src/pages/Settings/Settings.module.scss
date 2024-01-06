@@ -1,0 +1,52 @@
+@import '../../assets/scss/variables.scss';
+
+.page {
+    @apply w-full flex justify-center items-start relative w-screen h-screen overflow-hidden;
+}
+.page__right {
+    @apply flex items-start flex-col p-4 pl-12 pr-12 w-full;
+
+    h1 {
+        @apply w-full text-left font-black text-3xl flex items-center gap-2;
+        height: 10vh;
+        svg {
+            @apply font-black;
+        }
+    }
+
+    form {
+        @apply w-full flex justify-center items-center flex-col;
+        max-width: 70%;
+
+        div {
+            @apply flex justify-start items-start flex-col w-full mb-2 m-3;
+
+            label {
+                @apply text-base text-zinc-400
+            }
+            input, textarea {
+                @apply rounded-md w-full p-2 outline-none;
+                border:  2px solid rgb(20,20,20,.3);
+
+                &:hover {
+                    border-color: $pink;
+                }
+                &:focus {
+                    border-color: $pink;
+                }
+            }
+        }
+        .buttons {
+            @apply w-full flex justify-end items-center flex-row gap-4; 
+
+            a {
+                @apply rounded-md p-2 pl-4 pr-4 text-zinc-400;
+                border: 2px solid rgb(20,20,20,.3);
+                &:hover {
+                    border-color: rgb(20,20,20,.6);
+                    color: rgb(20,20,20,.6);
+                }
+            }
+        }
+    }
+}

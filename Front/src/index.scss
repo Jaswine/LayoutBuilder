@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import './assets/scss/variavles.scss';
+@import './assets/scss/variables.scss';
 
 * {
     @apply box-border p-0 m-0;
@@ -52,4 +52,8 @@ input:hover {
 input:focus {
     border-width: 3px;
     border-color: $pink;
+}
+
+textarea {
+    @apply transition-all delay-300 ease-linear;
 }

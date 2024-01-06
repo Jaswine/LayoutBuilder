@@ -70,7 +70,7 @@ namespace LayoutBuilder.Services.CommentServices
                     _context.Comments.Remove(comment);
                     await _context.SaveChangesAsync();
 
-                    commentResponse.Message = "Project removed successfully!";
+                    commentResponse.Message = "Comment removed successfully!";
                     return commentResponse;
                 }
             } 

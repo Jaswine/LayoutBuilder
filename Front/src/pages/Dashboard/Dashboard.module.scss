@@ -38,9 +38,11 @@
     }
 }
 
-
+.pre__page__right__projects {
+    @apply flex justify-center items-center pr-4 pl-4 w-full;
+}
 .page__right__projects {
-    @apply flex z-10 justify-start flex-col w-full overflow-y-scroll relative pr-2 pl-4 pb-20;
+    @apply flex z-10 justify-start items-start flex-col w-full overflow-y-scroll relative pr-2 pl-4 pb-20;
     height: 80vh;
 
     .page__projects {
@@ -57,9 +59,15 @@
                 // scale: 1.05
             }
     
-            iframe {
-                @apply w-full rounded-md;
+            .project__iframe {
+                @apply w-full rounded-md p-2 flex justify-center items-center flex-col ;
+                height: 160px;
                 border: 1px solid rgb(20,20,20,.1);
+
+                .project__maket {
+                    @apply w-full h-full flex justify-start items-center flex-col;
+                    scale: .5
+                }
             }
             a {
                 @apply text-lg mt-1 ;
@@ -68,6 +76,16 @@
             span {
                 @apply text-sm text-zinc-400;
             }
+        }
+    }
+
+    h2 {
+        @apply flex justify-center items-center flex-col gap-6 font-bold text-4xl text-zinc-400;
+        img {
+            width: 100%;
+            height: 100%;
+            max-width: 300px;
+            object-fit: cover;
         }
     }
 }

@@ -1,0 +1,17 @@
+.NotFound {
+    @apply flex justify-center items-center flex-col w-full h-screen overflow-hidden ;
+    img {
+        @apply object-cover w-full h-full mb-5;
+        max-width: 380px;
+        max-height: 240px;
+    }
+    h1 {
+        @apply font-black text-zinc-400 text-5xl
+    }
+    p {
+        @apply mt-2;
+        a {
+            @apply font-bold text-pink-500;
+        }
+    }
+}

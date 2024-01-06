@@ -20,36 +20,36 @@ const Constructor:FC = () => {
 
     const [projectTitle, setProjectTitle] = useState<string>('')
     const [projectData, setProjectData] = useState('')
+    const [projectOtherData, setProjectOtherData] = useState({
+        'description': '',
+        'allowComments': false,
+    })
 
     const [mainMenu, setMainMenu] = useState<string>('ElementsMenu')
     const [mainMenuPlace, setMainMenuPlace] = useState([])
 
     const [projectPrivacyWindow, setProjectPrivacyWindow] = useState<boolean>(false)
 
-
     useEffect(() => {
         document.title = 'Constructor'
+        !isAuth && navigate('/sign-in')
 
-        if (!isAuth) {
-            navigate('/sign-in')
-        }
         getProjectData()
     }, [id])
 
     useEffect(() => {
         if (mainMenu == 'ElementsMenu') {
-            setMainMenuPlace(MenuElements)
-            console.log(mainMenuPlace)
+            MenuElements.map((element) => {
+                console.log(element)
+            })
         }
-    }, [id, mainMenu])
+    }, [id, MenuElements])
     
 
     const renderTemplate = (data) => {
         setProjectData(data)
-        $axios.put(`/project/${id}`, {
-            "title": projectTitle,
+        $axios.put(`/project/${id}/data`, {
             "data": data,
-            "isPublic": project.isPublic,
         })
             .then(res => {
                 console.log(res.data)
@@ -71,21 +71,24 @@ const Constructor:FC = () => {
             } else {
                 renderTemplate(`<h1 style="font-size: 32px; font-weight: bold;">Hello World!🖐️</h1>`)
             }
+
+            setProjectOtherData({
+                'description': res.data.data.description,
+                'allowComments': res.data.data.allowComments,
+            })
         })
    } 
 
     const changeProjectTitle = (e) => {
         setProjectTitle(e.target.value)
 
-        $axios.put(`/project/${id}`, {
+        $axios.put(`/project/${id}/title`, {
             "title": e.target.value,
-            "data": projectData,
-            "isPublic": project.isPublic
         })
     }
 
     const clearProjectTemplate = () => {
-        if (confirm('Are you sure?')) {
+        if (confirm('Delete everything?')) {
             renderTemplate("<div></div>")
         }
     }
@@ -93,9 +96,10 @@ const Constructor:FC = () => {
     const changeProjectPrivacy = (e) => {
         e.preventDefault()
 
-        $axios.put(`/project/${id}`, {
-            "title": e.target.value,
-            "data": projectData,
+        $axios.put(`/project/${id}/public`, {
+            "title": projectTitle,
+            "description": projectOtherData.description,
+            'allowComments': projectOtherData.allowComments,
             "isPublic": project.isPublic ? false : true
         })
         
@@ -129,15 +133,33 @@ const Constructor:FC = () => {
                                 required  />
                         </div>
 
+                        <div className={styles.form__component}>
+                            <label htmlFor="">Description:</label>
+                            <textarea 
+                                value={projectOtherData.description}
+                                onChange={e => setProjectOtherData({...projectOtherData, description: e.target.value})}
+                                placeholder="Enter project's description"
+                                ></textarea>
+                        </div>
+
+                        <div className={styles.form__component}>
+                            <label htmlFor="">Allow Comments:</label>
+                            <input 
+                                type="checkbox"
+                                onChange={e => setProjectOtherData({...projectOtherData, allowComments: e.target.checked})}
+                                checked={projectOtherData.allowComments}
+                                required  />
+                        </div>
+
                     </div>
                     <div className={styles.page__window__header}>
-                        <p>You're publishing as the {authUsername} profile</p>
+                        <p>You're publishing as the <b>{authUsername}</b> profile</p>
                         <div className="">
                             <button onClick={() => setProjectPrivacyWindow(projectPrivacyWindow ? false : true)}>
                                 Cancel
                             </button>
                             <button onClick={changeProjectPrivacy}>
-                                {project.isPublic ? 'unpublish' : 'publish'}
+                                Publish
                             </button>
                         </div>
                     </div>

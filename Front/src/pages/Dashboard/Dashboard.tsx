@@ -3,22 +3,33 @@ import { useAuth } from "../../hooks/useAuth";
 import { Link, useNavigate } from "react-router-dom";
 import styles from './Dashboard.module.scss'
 import { $axios } from "../../api";
-import { TbLogout } from "react-icons/tb";
 import NavBar from "../../components/NavBar/NavBar";
+import ProjectsList from "../../components/ProjectsList/ProjectsList";
+import Loading from "../../components/Loading/Loading";
 
+interface Project {
+    id: number;
+    data: string;
+    title: string;
+    updatedAt: string;
+    createdAt: string;
+  }
+
+
+interface ProjectsListProps {
+    projects: Project[];
+}
 
 const Dashboard:FC = () => {
     const navigate = useNavigate()
     const {isAuth, authEmail, authUsername} = useAuth()
 
-    const [projectsData, setProjectsData] = useState({})
+    const [projectsData, setProjectsData] = useState<ProjectsListProps>([])
 
     useEffect(() => {
         document.title = 'Dashboard'
+        // !isAuth && navigate('/sign-in')
 
-        if (!isAuth) {
-            navigate('/sign-in')
-        }
     }, [isAuth])
 
     useEffect(() => {
@@ -44,7 +55,6 @@ const Dashboard:FC = () => {
             })
     }
 
-
     return (
         <div className={styles.page}>
             <NavBar/>
@@ -68,21 +78,9 @@ const Dashboard:FC = () => {
                         </select>
                     </div>
                 </div>
-
-                <div className={styles.page__right__projects}>
-                    {projectsData.length > 0
-                    ?  ( <div className={styles.page__projects}>
-                            {projectsData.map((project, index)=> 
-                                <Link to={`/dashboard/${project.id}`} className={styles.project} key={index}>
-                                    <iframe src="/dashboard" 
-                                            loading="lazy"
-                                            scrolling="no"></iframe>
-                                    <Link to={`/dashboard/${project.id}`}>{project.title}</Link>
-                                    <span>{project.updatedAt.slice(0, 10)}</span>
-                                </Link>
-                            )}
-                        </div>)
-                    :(<h2>Loading</h2>)}
+                
+                <div className={styles.pre__page__right__projects}>
+                    <ProjectsList projects={projectsData} link_to='dashboard' username={''}  />
                 </div>
 
             </div>
