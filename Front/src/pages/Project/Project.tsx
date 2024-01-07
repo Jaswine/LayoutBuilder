@@ -101,9 +101,15 @@ const Project:FC = () => {
                         <button><FaRegBookmark /></button>
                    </div>
                 </div>
-                <div 
+                {/* <div 
                     className={styles.page__right__maket}
                     dangerouslySetInnerHTML={{ __html: project.data }}> 
+                </div> */}
+
+                <div className={styles.page__right__maket}>
+                    {JSON.parse(project.data).map((p, index) => (
+                        <div key={index} dangerouslySetInnerHTML={{ __html: p }} />
+                    ))}
                 </div>
 
                 <div className={styles.page__right__description}>

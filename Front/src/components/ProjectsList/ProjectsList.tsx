@@ -29,8 +29,11 @@ const ProjectsList:FC<ProjectsListProps> = ({projects , link_to, username}) => {
                             <div className={styles.project__iframe}>
                                 <div
                                     className={styles.project__maket}
-                                    dangerouslySetInnerHTML={{ __html: project.data }}
-                                ></div>
+                                >
+                                {JSON.parse(project.data).map((p, index) => (
+                                    <div key={index} dangerouslySetInnerHTML={{ __html: p }} />
+                                ))}
+                                </div>
                             </div>
                             <Link to={`/${link_to}${link_to == 'dashboard' ? '/' : `/${username}/projects/`}${project.id}`}>{project.title}</Link>
                             <span>{project.updatedAt.slice(0, 10)}</span>

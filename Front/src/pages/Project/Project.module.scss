@@ -80,6 +80,9 @@
     &__maket {
         @apply flex justify-center items-center flex-col w-full mt-6 mb-6 rounded-md p-4 ;
         border: 1px solid rgb(20,20,20,.1); 
+        div {
+            @apply w-full
+        }
     }
 }
 

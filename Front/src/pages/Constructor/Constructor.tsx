@@ -54,6 +54,9 @@ const Constructor:FC = () => {
     const getProjectStructure = () => {
         setMainMenuPlace(prevState => [])
         setMainMenuAnotherElements(prevState => [])
+
+        setMainMenuPlace(projectData)
+        console.log(projectData)
     }
  
     // !: Render Template
@@ -64,14 +67,14 @@ const Constructor:FC = () => {
 
     // !: Save Render Template
     const saveRenderTemplate = (data) => {
-        console.log('Save Render Template RESPONSE: ', projectData)
-        console.log('Save Render Template JSON stringify: ',  JSON.stringify(projectData))
+        // console.log('Save Render Template RESPONSE: ', projectData)
+        // console.log('Save Render Template JSON stringify: ',  JSON.stringify(projectData))
 
         $axios.put(`/project/${id}/data`, {
             "data": JSON.stringify(data),
         })
             .then(res => {
-                console.log(' Save Render Template RESPONSE: ', res.data)
+                // console.log(' Save Render Template RESPONSE: ', res.data)
             })
             .catch(err => {
                 console.error(err)
@@ -82,10 +85,8 @@ const Constructor:FC = () => {
    const getProjectData = () => {
         $axios(`/project/dashboard/${id}`)
         .then(res => {
-            console.log(res.data)
             setProject(res.data.data)
             setProjectTitle(res.data.data.title)
-            console.log(res.data.data.data)
 
             if (res.data.data.data) {
                 setProjectData(JSON.parse(res.data.data.data))
@@ -125,11 +126,12 @@ const Constructor:FC = () => {
             "title": projectTitle,
             "description": projectOtherData.description,
             'allowComments': projectOtherData.allowComments,
-            "isPublic": project.isPublic ? false : true
+            "isPublic": true
         })
         
         navigate(`/profile/${authUsername}/projects/${id}`)
     }
+
 
     // ! Change Main Menu
     const changeMainMenu = (type) => {
@@ -140,25 +142,17 @@ const Constructor:FC = () => {
         } else if (type == 'ProjectStructure') {
             getProjectStructure()
         }
-
-        console.log(type)
     }
 
     // ! Change Another Element
     const chooseAnotherElement = (menu) => {
-        console.log('choosing another element', menu)
         setMainMenuAnotherElements(menu.elements)
     }
 
-    // // ! Add Element To Template
-    // const addElementToTemplate = (element) => {
-    //     // console.log(element)
-    // }
     const deleteProject = () => {
         if (confirm('Are you sure you want to delete?')) {
             $axios.delete(`/project/${project.id}`)
                 .then((res) => {
-                    console.log(res);
                     navigate('/dashboard')
                 })
         }
@@ -210,9 +204,15 @@ const Constructor:FC = () => {
                             <button onClick={() => setProjectPrivacyWindow(projectPrivacyWindow ? false : true)}>
                                 Cancel
                             </button>
+                            {project.isPublic ? (
+                            <button onClick={changeProjectPrivacy}>
+                                Update
+                            </button>
+                            ): (
                             <button onClick={changeProjectPrivacy}>
                                 Publish
                             </button>
+                            )}
                         </div>
                     </div>
                 </form>
@@ -259,7 +259,9 @@ const Constructor:FC = () => {
                         </button>
                     </div>
                     <div className={styles.page__footer__left__others}>
-                        {mainMenuPlace.length > 0 ? (
+                        {mainMenu == 'ElementsMenu' ? (
+                            <>
+                            {mainMenuPlace.length > 0 ? (
                             <>
                                 {mainMenuPlace.map((menu, index) =>
                                     <span onClick={() => chooseAnotherElement(menu)} key={index} className={styles.page__footer__left__others__element}>
@@ -268,6 +270,16 @@ const Constructor:FC = () => {
                                 )}
                             </>
                         ) : (<></>)}
+                            </>
+                        ): (
+                            <>
+                            {mainMenuPlace.map((menu, index) =>
+                                <div onClick={() => window.navigator.clipboard.writeText(menu)} className={styles.page__footer__left__others__element}>
+                                    {menu}
+                                </div>
+                            )}
+                            </>
+                        )}
                     </div>
                         {mainMenuAnotherElements.length > 0 && (
                             <div className={styles.page__footer__left__another__elements}>

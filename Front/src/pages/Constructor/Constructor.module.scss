@@ -11,7 +11,7 @@
     
     &__left {
         button {
-            @apply bg-transparent text-2xl p-2 pb-1;
+            @apply bg-transparent text-2xl p-2 pl-4 pb-1;
             color: $primary;
             &:hover {
                 @apply shadow-none text-white;
@@ -40,12 +40,14 @@
 }
 .page__footer {
     @apply grid w-full;
-    grid-template-columns: 18% 60% 18%;
+    // grid-template-columns: 18% 60% 18%;
+    grid-template-columns: 26% 70%;
     height: 92vh;
 }
 .page__footer__left {
     @apply w-full grid bg-white z-10 relative;
     grid-template-columns: 20% 80%;
+    height: 92vh;
     border-right: 1px solid rgb(20,20,20,.1);
 
     button {
@@ -70,7 +72,8 @@
         }
     }
     .page__footer__left__others {
-        @apply h-screen flex justify-start items-center w-full flex-col p-1 overflow-y-auto;
+        @apply flex justify-start items-center w-full flex-col p-1 overflow-y-auto overflow-hidden;
+        height: 92vh;
         border-right: 1px solid rgb(20,20,20,.1);
 
         &__element {
@@ -98,7 +101,7 @@
 
             * {
                 // scale: .6;
-                font-size: 7.5px;
+                font-size: 7px;
             }
 
             &:hover {
@@ -115,6 +118,9 @@
     .maket {
         @apply flex justify-start items-center flex-col w-full rounded-md;
         border: 1px solid rgb(20,20,20,.1);
+        div {
+            @apply w-full
+        }
     }
 }
 .page__footer__right {
