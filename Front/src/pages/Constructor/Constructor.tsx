@@ -11,6 +11,7 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import MenuElements from "./MenuElements";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { useAuth } from "../../hooks/useAuth";
+import { AiOutlineClear } from "react-icons/ai";
 
 const Constructor:FC = () => {
     const {id} = useParams()
@@ -19,7 +20,7 @@ const Constructor:FC = () => {
     const [project, setProject] = useState({})
 
     const [projectTitle, setProjectTitle] = useState<string>('')
-    const [projectData, setProjectData] = useState('')
+    const [projectData, setProjectData] = useState([])
     const [projectOtherData, setProjectOtherData] = useState({
         'description': '',
         'allowComments': false,
@@ -27,6 +28,7 @@ const Constructor:FC = () => {
 
     const [mainMenu, setMainMenu] = useState<string>('ElementsMenu')
     const [mainMenuPlace, setMainMenuPlace] = useState([])
+    const [mainMenuAnotherElements, setMainMenuAnotherElements] = useState([])
 
     const [projectPrivacyWindow, setProjectPrivacyWindow] = useState<boolean>(false)
 
@@ -39,37 +41,56 @@ const Constructor:FC = () => {
 
     useEffect(() => {
         if (mainMenu == 'ElementsMenu') {
-            MenuElements.map((element) => {
-                console.log(element)
-            })
+            getMainElements()
         }
-    }, [id, MenuElements])
+    }, [MenuElements])
     
+    // ! Get elements
+    const getMainElements = () => {
+       setMainMenuPlace(MenuElements)
+    }
 
+    // ! Get project structure
+    const getProjectStructure = () => {
+        setMainMenuPlace(prevState => [])
+        setMainMenuAnotherElements(prevState => [])
+    }
+ 
+    // !: Render Template
     const renderTemplate = (data) => {
-        setProjectData(data)
+        setProjectData([...projectData, data]);
+        saveRenderTemplate([...projectData, data])
+    };
+
+    // !: Save Render Template
+    const saveRenderTemplate = (data) => {
+        console.log('Save Render Template RESPONSE: ', projectData)
+        console.log('Save Render Template JSON stringify: ',  JSON.stringify(projectData))
+
         $axios.put(`/project/${id}/data`, {
-            "data": data,
+            "data": JSON.stringify(data),
         })
             .then(res => {
-                console.log(res.data)
+                console.log(' Save Render Template RESPONSE: ', res.data)
             })
             .catch(err => {
                 console.error(err)
             })
     }
 
+    // !: Get data about project
    const getProjectData = () => {
         $axios(`/project/dashboard/${id}`)
         .then(res => {
             console.log(res.data)
             setProject(res.data.data)
             setProjectTitle(res.data.data.title)
+            console.log(res.data.data.data)
 
             if (res.data.data.data) {
-                setProjectData(res.data.data.data)
+                setProjectData(JSON.parse(res.data.data.data))
             } else {
-                renderTemplate(`<h1 style="font-size: 32px; font-weight: bold;">Hello World!🖐️</h1>`)
+                renderTemplate(`<div><h1 style="font-size: 32px; font-weight: bold;">Hello World!🖐️</h1></div>`)
             }
 
             setProjectOtherData({
@@ -79,6 +100,7 @@ const Constructor:FC = () => {
         })
    } 
 
+    // ! Change Project Title
     const changeProjectTitle = (e) => {
         setProjectTitle(e.target.value)
 
@@ -87,12 +109,15 @@ const Constructor:FC = () => {
         })
     }
 
+    // ! clearProjectTemplate
     const clearProjectTemplate = () => {
         if (confirm('Delete everything?')) {
-            renderTemplate("<div></div>")
+            setProjectData([])
+            saveRenderTemplate([])
         }
     }
 
+    // ! changeProjectPrivacy
     const changeProjectPrivacy = (e) => {
         e.preventDefault()
 
@@ -106,10 +131,37 @@ const Constructor:FC = () => {
         navigate(`/profile/${authUsername}/projects/${id}`)
     }
 
+    // ! Change Main Menu
     const changeMainMenu = (type) => {
         setMainMenu(type)
 
+        if (type == 'ElementsMenu') {
+            getMainElements()
+        } else if (type == 'ProjectStructure') {
+            getProjectStructure()
+        }
+
         console.log(type)
+    }
+
+    // ! Change Another Element
+    const chooseAnotherElement = (menu) => {
+        console.log('choosing another element', menu)
+        setMainMenuAnotherElements(menu.elements)
+    }
+
+    // // ! Add Element To Template
+    // const addElementToTemplate = (element) => {
+    //     // console.log(element)
+    // }
+    const deleteProject = () => {
+        if (confirm('Are you sure you want to delete?')) {
+            $axios.delete(`/project/${project.id}`)
+                .then((res) => {
+                    console.log(res);
+                    navigate('/dashboard')
+                })
+        }
     }
 
     return (
@@ -185,12 +237,14 @@ const Constructor:FC = () => {
 
                 <div className={styles.page__top__right}>
                     <button onClick={() => setProjectPrivacyWindow(projectPrivacyWindow ? false : true)}><RiShareForwardLine /></button>
-                    <button onClick={clearProjectTemplate}><FaRegTrashAlt /></button>
+                    <button onClick={clearProjectTemplate}><AiOutlineClear /></button>
+                    <button onClick={deleteProject}><FaRegTrashAlt /></button>
                 </div>
                 
             </div>
 
             <div className={styles.page__footer}>
+
                 <div className={styles.page__footer__left}>
                     <div className={styles.page__footer__left__main}>
                         <button 
@@ -205,15 +259,44 @@ const Constructor:FC = () => {
                         </button>
                     </div>
                     <div className={styles.page__footer__left__others}>
-                        
+                        {mainMenuPlace.length > 0 ? (
+                            <>
+                                {mainMenuPlace.map((menu, index) =>
+                                    <span onClick={() => chooseAnotherElement(menu)} key={index} className={styles.page__footer__left__others__element}>
+                                        {menu.name}
+                                    </span>
+                                )}
+                            </>
+                        ) : (<></>)}
                     </div>
+                        {mainMenuAnotherElements.length > 0 && (
+                            <div className={styles.page__footer__left__another__elements}>
+                                {mainMenuAnotherElements.map((menu, index) =>
+                                    <div 
+                                        onClick={() => renderTemplate(menu)} 
+                                        key={index} 
+                                        className={styles.page__footer__left__another__element}
+                                        dangerouslySetInnerHTML={{ __html: menu }}
+                                        >
+                                    </div>
+                                )}
+                            </div>
+                        )}
                 </div>
+
                 <div 
                     className={styles.page__footer__center} >
                     <div className={styles.maket}
-                    dangerouslySetInnerHTML={{ __html: projectData }}></div>
+                    // dangerouslySetInnerHTML={{ __html: projectData }}
+                    >
+                        {projectData.map((project, index) => (
+                            <div key={index} dangerouslySetInnerHTML={{ __html: project }} />
+                        ))}
+                    </div>
                 </div>
+
                 <div className={styles.page__footer__right}></div>
+
             </div>
         </div>
     )

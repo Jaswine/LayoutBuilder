@@ -167,3 +167,4 @@
 /home/jaswine/Projects/asp.net/LayoutBuilder/bin/Debug/net8.0/Front/package.json
 /home/jaswine/Projects/asp.net/LayoutBuilder/bin/Debug/net8.0/Front/tsconfig.json
 /home/jaswine/Projects/asp.net/LayoutBuilder/bin/Debug/net8.0/Front/tsconfig.node.json
+/home/jaswine/Projects/asp.net/LayoutBuilder/bin/Debug/net8.0/Newtonsoft.Json.dll

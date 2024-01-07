@@ -44,7 +44,7 @@
     height: 92vh;
 }
 .page__footer__left {
-    @apply w-full grid bg-white z-10;
+    @apply w-full grid bg-white z-10 relative;
     grid-template-columns: 20% 80%;
     border-right: 1px solid rgb(20,20,20,.1);
 
@@ -70,7 +70,42 @@
         }
     }
     .page__footer__left__others {
-        @apply h-screen
+        @apply h-screen flex justify-start items-center w-full flex-col p-1 overflow-y-auto;
+        border-right: 1px solid rgb(20,20,20,.1);
+
+        &__element {
+            @apply block p-1 w-full rounded-md text-center mb-1 text-base transition-all delay-300 ease-linear cursor-pointer;
+            color: rgb(20,20,20,.6);
+            border: 2px solid rgb(20,20,20,.1);
+
+            &:hover {
+                border-color: $pink;
+                color: $pink;
+            }
+        }
+    }
+    .page__footer__left__another__elements {
+        @apply bg-white overflow-x-hidden h-screen flex justify-start items-center w-full flex-col p-1 overflow-y-auto absolute  top-0;
+        height: 92vh;
+        border-right: 1px solid rgb(20,20,20,.1);
+        left: 100%;
+
+        .page__footer__left__another__element {
+            @apply block w-full rounded-md text-center mb-1 text-base transition-all delay-300 ease-linear cursor-pointer relative;
+            color: rgb(20,20,20,.6);
+            padding: 4px;
+            border: 2px solid rgb(20,20,20,.1);
+
+            * {
+                // scale: .6;
+                font-size: 7.5px;
+            }
+
+            &:hover {
+                border-color: $pink;
+                color: $pink;
+            }
+        }
     }
 }
 .page__footer__center {
@@ -158,4 +193,8 @@
             }
         }
     }
+}
+
+::-webkit-scrollbar {
+    width: 6px !important;
 }
